@@ -1,6 +1,7 @@
 import sys
 
 import pygame
+from pygame.sprite import Group
 
 from settings import Settings
 from ship import Ship
@@ -16,11 +17,15 @@ def run_game():
     bg_color = (ai_settings.bg_color)
     ship = Ship(ai_settings, screen)
 
+    # Создание группы для хранения пуль.
+    bullets = Group()
+
     #Запуск основного цикла игры
     while True:
-        gf.check_events(ship)
+        gf.check_events(ai_settings, screen, ship, bullets)
         ship.update()
-        gf.update_screen(ai_settings, screen, ship)
+        bullets.update()
+        gf.update_screen(ai_settings, screen, ship, bullets)
         screen.fill(ai_settings.bg_color)
         ship.blitme()
 
