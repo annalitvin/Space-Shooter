@@ -12,9 +12,7 @@ def check_keydown_events(event, ai_settings, screen, ship, bullets):
     elif event.key == pygame.K_LEFT:
         ship.moving_left = True
     elif event.key == pygame.K_SPACE:
-        # Создание новой пули и включение ее в группу bullets
-        new_bullet = Bullet(ai_settings, screen, ship)
-        bullets.add(new_bullet)
+        fire_bullet(ai_settings, screen, ship, bullets)
 
 
 def chech_keyup_events(event, ship):
@@ -44,3 +42,24 @@ def update_screen(ai_settings, screen, ship, bullets):
     ship.blitme()
     # Отображение последнего прорисованного экрана
     pygame.display.flip()
+
+
+def update_bullets(bullets):
+    """Обновляет позиции пуль и уничтожает страрые пули."""
+    # Обновление позиций пуль.
+    bullets.update()
+
+    # Удаление пуль, вышедших за край экрана
+
+    for bullet in bullets.copy():
+        if bullet.rect.bottom <= 0:
+            bullets.remove(bullet)
+
+
+def fire_bullet(ai_settings, screen, ship, bullets):
+    """Выпускает пулю, если если максимум еще не достигнут"""
+    # Создание новой пули и включени ее в группу bullets
+
+    if len(bullets) < ai_settings.bullet_allowed:
+        new_bullet = Bullet(ai_settings, screen, ship)
+        bullets.add(new_bullet)
